@@ -4,17 +4,23 @@
     {!! Form::text('name', null, ['class' => 'form-control','maxlength' => 255,'maxlength' => 255]) !!}
 </div>
 
+<div class="form-group col-sm-6">
+    {!! Form::label('Role', 'Roles:') !!}
+    <select  class="form-control"  multiple name="roles[]">
+        <option value="0" disabled>--Select role--</option>
+        @foreach($roles as $role)
+            <option value="{{$role->id}}" {{$user->roles->contains('id',$role->id) ? 'selected' : ''}}>{{$role->name}}</option>
+        @endforeach
+    </select>
+
+</div>
+
 <!-- Email Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('email', 'Email:') !!}
-    {!! Form::email('email', null, ['class' => 'form-control','maxlength' => 255,'maxlength' => 255]) !!}
+    {!! Form::email('email', null, ['class' => 'form-control','maxlength' => 255,'readonly' => true]) !!}
 </div>
 
-<!-- Email Verified At Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('email_verified_at', 'Email Verified At:') !!}
-    {!! Form::text('email_verified_at', null, ['class' => 'form-control','id'=>'email_verified_at']) !!}
-</div>
 
 @push('page_scripts')
     <script type="text/javascript">
@@ -25,15 +31,3 @@
         })
     </script>
 @endpush
-
-<!-- Password Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('password', 'Password:') !!}
-    {!! Form::password('password', ['class' => 'form-control','maxlength' => 255,'maxlength' => 255]) !!}
-</div>
-
-<!-- Remember Token Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('remember_token', 'Remember Token:') !!}
-    {!! Form::text('remember_token', null, ['class' => 'form-control','maxlength' => 100,'maxlength' => 100]) !!}
-</div>

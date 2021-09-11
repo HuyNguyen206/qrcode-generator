@@ -23,6 +23,14 @@
                 <div class="row">
                     @include('users.show_fields')
                 </div>
+                <div class="row">
+                    <h3>Transactions</h3>
+                    @include('transactions.table')
+                </div>
+                <div class="row">
+                    <h3>QR Codes</h3>
+                    @include('qrcodes.table')
+                </div>
             </div>
         </div>
     </div>

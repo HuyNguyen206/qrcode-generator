@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,7 +27,7 @@ class Transaction extends Model
     use HasFactory;
 
     public $table = 'transactions';
-    
+
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
@@ -78,5 +79,20 @@ class Transaction extends Model
         'updated_at' => 'nullable'
     ];
 
-    
+    public function qrcode()
+    {
+        return $this->belongsTo(Qrcode::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function qrcodeOwner()
+    {
+        return $this->belongsTo(User::class, 'qrcode_owner_id');
+    }
+
+
 }

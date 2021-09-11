@@ -23,6 +23,12 @@
                 <div class="row">
                     @include('roles.show_fields')
                 </div>
+                <div class="row">
+                    <h3>
+                        List users
+                    </h3>
+                    @include('users.table')
+                </div>
             </div>
         </div>
     </div>

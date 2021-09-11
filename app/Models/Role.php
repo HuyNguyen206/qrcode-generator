@@ -20,7 +20,7 @@ class Role extends Model
     use HasFactory;
 
     public $table = 'roles';
-    
+
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
@@ -54,5 +54,8 @@ class Role extends Model
         'updated_at' => 'nullable'
     ];
 
-    
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_role');
+    }
 }

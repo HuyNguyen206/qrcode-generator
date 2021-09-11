@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\UserPermissionTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -9,7 +10,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes, UserPermissionTrait;
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
@@ -49,14 +50,28 @@ class User extends Authenticatable
      */
     public static $rules = [
         'name' => 'required|string|max:255',
-        'email' => 'required|string|max:255',
-        'email_verified_at' => 'nullable',
-        'password' => 'required|string|max:255',
-        'remember_token' => 'nullable|string|max:100',
-        'deleted_at' => 'nullable',
-        'created_at' => 'nullable',
-        'updated_at' => 'nullable'
     ];
+
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class,'user_role');
+    }
+
+    public function canEditQrCode($qrcode)
+    {
+        return $qrcode->user_id == $this->id || ($this->isAdmin() || $this->isModerator());
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function qrcodes()
+    {
+        return $this->hasMany(Qrcode::class);
+    }
 
 
 }

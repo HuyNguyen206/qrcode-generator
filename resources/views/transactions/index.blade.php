@@ -7,12 +7,6 @@
                 <div class="col-sm-6">
                     <h1>Transactions</h1>
                 </div>
-                <div class="col-sm-6">
-                    <a class="btn btn-primary float-right"
-                       href="{{ route('transactions.create') }}">
-                        Add New
-                    </a>
-                </div>
             </div>
         </div>
     </section>
@@ -29,7 +23,7 @@
 
                 <div class="card-footer clearfix">
                     <div class="float-right">
-                        
+
                     </div>
                 </div>
             </div>

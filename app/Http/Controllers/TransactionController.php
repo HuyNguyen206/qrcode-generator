@@ -79,7 +79,6 @@ class TransactionController extends AppBaseController
 
             return redirect(route('transactions.index'));
         }
-
         return view('transactions.show')->with('transaction', $transaction);
     }
 

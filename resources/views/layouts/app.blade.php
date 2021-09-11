@@ -39,7 +39,7 @@
     @stack('page_css')
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed dark-mode">
+<body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
     <!-- Main Header -->
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -70,7 +70,7 @@
                     </li>
                     <!-- Menu Footer-->
                     <li class="user-footer">
-                        <a href="#" class="btn btn-default btn-flat">Profile</a>
+                        <a href="{{route('users.show', auth()->id())}}" class="btn btn-default btn-flat">Profile</a>
                         <a href="#" class="btn btn-default btn-flat float-right"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Sign out

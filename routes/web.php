@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,12 +27,13 @@ Route::middleware('auth')->group(function() {
     Route::resource('qrcodes', App\Http\Controllers\QrcodeController::class);
 
 
-    Route::resource('roles', App\Http\Controllers\RoleController::class);
+    Route::resource('roles', App\Http\Controllers\RoleController::class)->middleware('check-admin');
 
 
     Route::resource('transactions', App\Http\Controllers\TransactionController::class);
 
 
-    Route::resource('users', App\Http\Controllers\UserController::class);
+    Route::resource('users', App\Http\Controllers\UserController::class)->except('index');
+    Route::get('users', [UserController::class, 'index'])->name('users.index')->middleware('check-moderator');
 });
 

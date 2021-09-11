@@ -80,5 +80,10 @@ class Qrcode extends Model
         'updated_at' => 'nullable'
     ];
 
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
 
 }

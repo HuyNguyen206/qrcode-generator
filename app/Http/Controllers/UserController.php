@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Role;
 use App\Repositories\UserRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
@@ -79,8 +80,9 @@ class UserController extends AppBaseController
 
             return redirect(route('users.index'));
         }
-
-        return view('users.show')->with('user', $user);
+        $transactions = $user->transactions;
+        $qrcodes = $user->qrcodes;
+        return view('users.show', compact('user', 'transactions', 'qrcodes'));
     }
 
     /**
@@ -99,8 +101,9 @@ class UserController extends AppBaseController
 
             return redirect(route('users.index'));
         }
+        $roles = Role::all();
 
-        return view('users.edit')->with('user', $user);
+        return view('users.edit', compact('user', 'roles'));
     }
 
     /**
@@ -122,7 +125,7 @@ class UserController extends AppBaseController
         }
 
         $user = $this->userRepository->update($request->all(), $id);
-
+        $user->roles()->sync($request->roles);
         Flash::success('User updated successfully.');
 
         return redirect(route('users.index'));

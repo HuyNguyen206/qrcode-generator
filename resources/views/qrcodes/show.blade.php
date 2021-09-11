@@ -23,6 +23,10 @@
                 <div class="row">
                     @include('qrcodes.show_fields')
                 </div>
+                <div class="row">
+                    <h3>List of transactions</h3>
+                    @include('transactions.table')
+                </div>
             </div>
         </div>
     </div>
