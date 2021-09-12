@@ -35,5 +35,13 @@ Route::middleware('auth')->group(function() {
 
     Route::resource('users', App\Http\Controllers\UserController::class)->except('index');
     Route::get('users', [UserController::class, 'index'])->name('users.index')->middleware('check-moderator');
+
+
+    Route::resource('accounts', App\Http\Controllers\AccountController::class);
+
+
+    Route::resource('accountHistories', App\Http\Controllers\AccountHistoryController::class);
 });
+
+
 

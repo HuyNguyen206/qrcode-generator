@@ -58,11 +58,6 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class,'user_role');
     }
 
-    public function canEditQrCode($qrcode)
-    {
-        return $qrcode->user_id == $this->id || ($this->isAdmin() || $this->isModerator());
-    }
-
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
@@ -71,6 +66,16 @@ class User extends Authenticatable
     public function qrcodes()
     {
         return $this->hasMany(Qrcode::class);
+    }
+
+    public function account()
+    {
+        return $this->hasOne(Account::class);
+    }
+
+    public function accountHistories()
+    {
+        return $this->hasMany(AccountHistory::class);
     }
 
 
