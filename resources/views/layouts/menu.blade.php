@@ -1,3 +1,11 @@
+
+@auth
+    <li class="nav-item">
+        <a href="{{ route('accounts.my-account') }}"
+           class="nav-link {{ Request::routeIs('accounts.my-account') ? 'active' : '' }}">
+            <p>My Account</p>
+        </a>
+    </li>
 <li class="nav-item">
     <a href="{{ route('transactions.index') }}"
        class="nav-link {{ Request::is('transactions*') ? 'active' : '' }}">
@@ -23,6 +31,18 @@
         <p>Users</p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="{{ route('accounts.index') }}"
+       class="nav-link {{ Request::is('accounts', 'accounts/*/edit', 'accounts/create') || Request::routeIs('accounts.show') ? 'active' : '' }}">
+        <p>All Accounts</p>
+    </a>
+</li>
+<li class="nav-item">
+    <a href="{{ route('accountHistories.index') }}"
+       class="nav-link {{ Request::is('accountHistories*') ? 'active' : '' }}">
+        <p>Account Histories</p>
+    </a>
+</li>
 @endif
 
 @if($user->isAdmin())
@@ -33,25 +53,5 @@
     </a>
 </li>
 @endif
-
-
-
-
-
-
-<li class="nav-item">
-    <a href="{{ route('accounts.index') }}"
-       class="nav-link {{ Request::is('accounts*') ? 'active' : '' }}">
-        <p>Accounts</p>
-    </a>
-</li>
-
-
-<li class="nav-item">
-    <a href="{{ route('accountHistories.index') }}"
-       class="nav-link {{ Request::is('accountHistories*') ? 'active' : '' }}">
-        <p>Account Histories</p>
-    </a>
-</li>
-
+@endauth
 

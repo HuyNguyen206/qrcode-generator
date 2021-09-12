@@ -19,13 +19,13 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="btn btn-group float-right">
-                        @if($user->id == $account->user_id)
-                            {!! Form::open(['route' => ['qrcodes.destroy', $account->id], 'method' => 'delete']) !!}
+                        @if($user->isOwnerOfAccount($account) && !$account->applied_for_payout)
+                            {!! Form::open(['route' => ['accounts.applyPayout', $account->id], 'method' => 'post']) !!}
                             {!! Form::button('Apply for payout', ['type' => 'submit', 'class' => 'btn btn-primary btn-sm']) !!}
                             {!! Form::close() !!}
                         @endif
-                        @if($user->isAdmin() || $user->isModerator())
-                            {!! Form::open(['route' => ['qrcodes.destroy', $account->id], 'method' => 'delete']) !!}
+                        @if(($user->isAdmin() || $user->isModerator()) && !$account->paid)
+                            {!! Form::open(['route' => ['accounts.markAsPaid', $account->id], 'method' => 'post']) !!}
                             {!! Form::button('Mark as paid', ['type' => 'submit', 'class' => 'btn btn-success btn-sm']) !!}
                             {!! Form::close() !!}
                         @endif

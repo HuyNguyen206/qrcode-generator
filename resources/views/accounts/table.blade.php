@@ -7,6 +7,7 @@
         <th>Total Credit</th>
         <th>Total Debit</th>
         <th>Country</th>
+            <th>Status</th>
         <th>Action</th>
         </thead>
         <tbody>
@@ -17,6 +18,7 @@
             <td>${{ number_format($account->total_credit) }}</td>
             <td>${{ number_format($account->total_debit) }}</td>
             <td>{{ $account->country }}</td>
+                <td>{{$account->applied_for_payout ? 'Pending' : ($account->paid ? 'Paid' : null)}}</td>
                 <td width="120">
                     {!! Form::open(['route' => ['accounts.destroy', $account->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\QrcodeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,17 +16,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 Auth::routes();
 
+Route::get('qrcodes/{qrcode}', [QrcodeController::class, 'show'])->name('qrcodes.show');
 Route::middleware('auth')->group(function() {
+    Route::get('/', function () {
+        return view('home');
+    });
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
-    Route::resource('qrcodes', App\Http\Controllers\QrcodeController::class);
+    Route::resource('qrcodes', App\Http\Controllers\QrcodeController::class)->except('show');
 
 
     Route::resource('roles', App\Http\Controllers\RoleController::class)->middleware('check-admin');
@@ -35,10 +39,10 @@ Route::middleware('auth')->group(function() {
 
     Route::resource('users', App\Http\Controllers\UserController::class)->except('index');
     Route::get('users', [UserController::class, 'index'])->name('users.index')->middleware('check-moderator');
-
-
+    Route::get('accounts/my-account', [AccountController::class, 'myAccount'])->name('accounts.my-account');
+    Route::post('accounts/apply-payout/{account}', [AccountController::class, 'applyPayout'])->name('accounts.applyPayout');
+    Route::post('accounts/mark-as-paid/{account}', [AccountController::class, 'markAsPaid'])->name('accounts.markAsPaid');
     Route::resource('accounts', App\Http\Controllers\AccountController::class);
-
 
     Route::resource('accountHistories', App\Http\Controllers\AccountHistoryController::class);
 });

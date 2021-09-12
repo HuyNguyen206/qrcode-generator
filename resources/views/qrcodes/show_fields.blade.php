@@ -23,6 +23,7 @@
             <img src="{{Storage::url($qrcode->qrcode_path)}}" style="width: 200px" alt="">
         </div>
     </div>
+    @auth
     <hr>
     @php
         $user = auth()->user()
@@ -32,20 +33,20 @@
         <!-- User Id Field -->
         <div class="col-sm-12">
             {!! Form::label('user_id', 'User Id:') !!}
-            <p>{{ $qrcode->user_id }}</p>
+            <p>{{ $qrcode->user->name }}</p>
         </div>
 
         <!-- Website Field -->
         <div class="col-sm-12">
             {!! Form::label('website', 'Website:') !!}
-            <p>{{ $qrcode->website }}</p>
+            <p><a href="{{$qrcode->website}}">{{ $qrcode->website }}</a></p>
         </div>
 
 
         <!-- Callback Url Field -->
         <div class="col-sm-12">
             {!! Form::label('callback_url', 'Callback Url:') !!}
-            <p>{{ $qrcode->callback_url }}</p>
+            <p><a href="{{ $qrcode->callback_url }}">{{ $qrcode->callback_url }}</a></p>
         </div>
 
         <!-- Qrcode Path Field -->
@@ -63,6 +64,7 @@
         </div>
     </div>
         @endif
+    @endauth
 </div>
 
 

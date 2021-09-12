@@ -32,8 +32,13 @@ class QrcodeController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $qrcodes = $this->qrcodeRepository->all();
-
+        $user = $request->user();
+        if ($user->isAdmin() || $user->isModerator()) {
+            $qrcodes = $this->qrcodeRepository->all();
+        }
+        else {
+            $qrcodes = $user->qrcodes;
+        }
         return view('qrcodes.index')
             ->with('qrcodes', $qrcodes);
     }

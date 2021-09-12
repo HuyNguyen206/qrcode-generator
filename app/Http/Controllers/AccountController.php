@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateAccountRequest;
 use App\Http\Requests\UpdateAccountRequest;
+use App\Models\Account;
 use App\Repositories\AccountRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Flash;
+use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Response;
 
 class AccountController extends AppBaseController
@@ -18,6 +22,8 @@ class AccountController extends AppBaseController
     public function __construct(AccountRepository $accountRepo)
     {
         $this->accountRepository = $accountRepo;
+        $this->middleware('check-moderator')->only('markAsPaid');
+        $this->middleware('check-admin')->except('markAsPaid', 'myAccount');
     }
 
     /**
@@ -133,9 +139,9 @@ class AccountController extends AppBaseController
      *
      * @param int $id
      *
+     * @return Response
      * @throws \Exception
      *
-     * @return Response
      */
     public function destroy($id)
     {
@@ -152,5 +158,51 @@ class AccountController extends AppBaseController
         Flash::success('Account deleted successfully.');
 
         return redirect(route('accounts.index'));
+    }
+
+    public function applyPayout(Account $account)
+    {
+        if (auth()->user()->isOwnerOfAccount($account)) {
+            $account->applied_for_payout = true;
+            $account->paid = false;
+            $account->last_date_applied = now();
+            $account->save();
+            $account->accountHistories()->create([
+                'user_id' => auth()->id(),
+                'message' => 'Payout request initiated by account owner'
+            ]);
+            Flash::success('Account apply for payout successfully.');
+            return redirect()->back();
+        }
+        Flash::error('You can not perform this operation on account which it not your');
+        return redirect()->back();
+    }
+
+    public function markAsPaid(Account $account)
+    {
+        $user = auth()->user();
+        $account->applied_for_payout = false;
+        $account->paid = true;
+        $account->last_date_paid = now();
+        $account->save();
+        $account->accountHistories()->create([
+            'user_id' =>$account->user_id,
+            'message' => "Payment completed by $user->name(admin)"
+        ]);
+        Flash::success('Account mark as paid successfully.');
+        return redirect()->back();
+    }
+
+    public function myAccount()
+    {
+        $account = \request()->user()->account;
+
+        if (empty($account)) {
+            Flash::error('You do not have account yet');
+
+            return redirect()->back();
+        }
+        $accountHistories = $account->accountHistories;
+        return view('accounts.show', compact('account', 'accountHistories'));
     }
 }

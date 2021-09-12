@@ -61,12 +61,6 @@
         <p>{{ $account->applied_for_payout ? 'Yes' : 'No'}}</p>
     </div>
 
-    <!-- Paid Field -->
-    <div class="col-sm-12">
-        {!! Form::label('paid', 'Paid:') !!}
-        <p>{{ $account->paid }}</p>
-    </div>
-
     <!-- Country Field -->
     <div class="col-sm-12">
         {!! Form::label('country', 'Country:') !!}
@@ -76,13 +70,13 @@
     <!-- Last Date Applied Field -->
     <div class="col-sm-12">
         {!! Form::label('last_date_applied', 'Last Date Applied:') !!}
-        <p>{{ $account->last_date_applied }}</p>
+        <p>{{ $account->last_date_applied->toFormattedDateString() }}</p>
     </div>
 
     <!-- Last Date Paid Field -->
     <div class="col-sm-12">
         {!! Form::label('last_date_paid', 'Last Date Paid:') !!}
-        <p>{{ $account->last_date_paid }}</p>
+        <p>{{ $account->last_date_paid->toFormattedDateString() }}</p>
     </div>
 
     <!-- Other Details Field -->

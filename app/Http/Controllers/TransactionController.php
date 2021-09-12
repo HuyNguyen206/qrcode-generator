@@ -29,7 +29,13 @@ class TransactionController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $transactions = $this->transactionRepository->all();
+        $user = $request->user();
+        if ($user->isAdmin() || $user->isModerator()) {
+            $transactions = $this->transactionRepository->all();
+        }
+       else {
+           $transactions = $user->transactions;
+       }
 
         return view('transactions.index')
             ->with('transactions', $transactions);

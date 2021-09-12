@@ -26,4 +26,9 @@ trait UserPermissionTrait {
     {
         return $qrcode->user_id == $this->id || ($this->isAdmin() || $this->isModerator());
     }
+
+    public function isOwnerOfAccount($account)
+    {
+        return $this->id == $account->user_id;
+    }
 }

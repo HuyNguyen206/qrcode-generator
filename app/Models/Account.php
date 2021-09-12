@@ -39,7 +39,7 @@ class Account extends Model
     const UPDATED_AT = 'updated_at';
 
 
-    protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at', 'last_date_paid', 'last_date_applied'];
 
 
 
