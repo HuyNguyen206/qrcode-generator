@@ -31,13 +31,12 @@ class AccountFactory extends Factory
         'bank_name' => $this->faker->word,
         'bank_branch' => $this->faker->word,
         'bank_account' => $this->faker->word,
-        'applied_for_payout' => $this->faker->word,
-        'paid' => $this->faker->word,
+        'applied_for_payout' => $this->faker->randomDigitNotNull,
+        'paid' => $this->faker->randomDigitNotNull,
         'country' => $this->faker->word,
-        'last_date_applied' => $this->faker->word,
-        'last_date_paid' => $this->faker->word,
+        'last_date_applied' => $this->faker->date('Y-m-d'),
+        'last_date_paid' => $this->faker->date('Y-m-d'),
         'other_details' => $this->faker->text,
-        'deleted_at' => $this->faker->date('Y-m-d H:i:s'),
         'created_at' => $this->faker->date('Y-m-d H:i:s'),
         'updated_at' => $this->faker->date('Y-m-d H:i:s')
         ];

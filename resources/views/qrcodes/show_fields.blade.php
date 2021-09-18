@@ -21,6 +21,7 @@
         </div>
         <div class="col-md-4">
             <img src="{{Storage::url($qrcode->qrcode_path)}}" style="width: 200px" alt="">
+           @include('qrcodes.partials.paystack-form')
         </div>
     </div>
     @auth

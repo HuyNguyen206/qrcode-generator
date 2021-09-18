@@ -1,9 +1,13 @@
+@php
+    $tableName = 'role';
+@endphp
+@include('component.data-table')
 <div class="table-responsive">
-    <table class="table" id="roles-table">
+    <table class="table" id="{{$tableName}}">
         <thead>
         <tr>
             <th>Name</th>
-            <th colspan="3">Action</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>

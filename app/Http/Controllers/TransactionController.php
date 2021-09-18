@@ -31,10 +31,10 @@ class TransactionController extends AppBaseController
     {
         $user = $request->user();
         if ($user->isAdmin() || $user->isModerator()) {
-            $transactions = $this->transactionRepository->all();
+            $transactions = $this->transactionRepository->makeModel()->latest()->get();
         }
        else {
-           $transactions = $user->transactions;
+           $transactions = $user->transactions->sortByDesc('created_at');
        }
 
         return view('transactions.index')

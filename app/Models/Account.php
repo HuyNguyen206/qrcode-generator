@@ -69,9 +69,9 @@ class Account extends Model
     protected $casts = [
         'id' => 'integer',
         'user_id' => 'integer',
-        'balance' => 'float',
-        'total_credit' => 'float',
-        'total_debit' => 'float',
+//        'balance' => 'float',
+//        'total_credit' => 'float',
+//        'total_debit' => 'float',
         'withdrawal_method' => 'string',
         'payment_email' => 'string',
         'bank_name' => 'string',

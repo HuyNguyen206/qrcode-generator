@@ -1,5 +1,9 @@
+@php
+    $tableName = 'accountHistory';
+@endphp
+@include('component.data-table')
 <div class="table-responsive">
-    <table class="table" id="accountHistories-table">
+    <table class="table" id="{{$tableName}}">
         <thead>
         <tr>
             <th>Account Id</th>

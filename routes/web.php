@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\QrcodeController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('qrcodes/{qrcode}', [QrcodeController::class, 'show'])->name('qrcodes.show');
+Route::get('transactions/{transaction}', [TransactionController::class, 'show'])->name('transactions.show');
 Route::middleware('auth')->group(function() {
     Route::get('/', function () {
         return view('home');
@@ -34,7 +36,7 @@ Route::middleware('auth')->group(function() {
     Route::resource('roles', App\Http\Controllers\RoleController::class)->middleware('check-admin');
 
 
-    Route::resource('transactions', App\Http\Controllers\TransactionController::class);
+    Route::resource('transactions', App\Http\Controllers\TransactionController::class)->except('show');
 
 
     Route::resource('users', App\Http\Controllers\UserController::class)->except('index');
@@ -47,5 +49,9 @@ Route::middleware('auth')->group(function() {
     Route::resource('accountHistories', App\Http\Controllers\AccountHistoryController::class);
 });
 
+// Laravel 8
+Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
+Route::get('/payment/callback', [App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
+Route::get('/payment/redirect-to-callback', [App\Http\Controllers\PaymentController::class, 'redirectToCallBack'])->name('redirectToCallBack');
 
 

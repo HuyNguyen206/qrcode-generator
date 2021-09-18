@@ -1,5 +1,9 @@
+@php
+    $tableName = 'account';
+@endphp
+@include('component.data-table')
 <div class="table-responsive">
-    <table class="table" id="accounts-table">
+    <table class="table" id="account">
         <thead>
         <tr>
             <th>User</th>

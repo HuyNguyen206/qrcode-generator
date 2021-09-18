@@ -1,9 +1,11 @@
 @php
-       $currentUser = auth()->user();
-       $canManageUsers = $currentUser->isAdmin() || $currentUser->isModerator();
+    $tableName = 'user';
+        $currentUser = auth()->user();
+        $canManageUsers = $currentUser->isAdmin() || $currentUser->isModerator();
 @endphp
+@include('component.data-table')
 <div class="table-responsive">
-    <table class="table" id="users-table">
+    <table class="table" id="{{$tableName}}">
         <thead>
         <tr>
             <th>Name</th>

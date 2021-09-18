@@ -1,12 +1,16 @@
+@php
+    $tableName = 'qrcodeTable';
+@endphp
+@include('component.data-table')
 <div class="table-responsive">
-    <table class="table" id="qrcodes-table">
+    <table class="table" id="{{$tableName}}">
         <thead>
         <tr>
             <th>Product Name</th>
             <th>Website</th>
             <th>Amount</th>
             <th>Status</th>
-            <th colspan="3">Action</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>
