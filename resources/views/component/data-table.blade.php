@@ -1,7 +1,9 @@
 @push('page_scripts')
     <script>
         $(document).ready(function () {
-            $("#{{$tableName}}").DataTable();
+            $("#{{$tableName}}").DataTable( {
+                "order": [[ 5, "desc" ]]
+            });
         });
     </script>
 @endpush

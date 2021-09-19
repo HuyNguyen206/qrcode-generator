@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Account;
 use App\Models\AccountHistory;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AccountHistoryFactory extends Factory
@@ -21,11 +23,11 @@ class AccountHistoryFactory extends Factory
      */
     public function definition()
     {
+
         return [
-            'account_id' => $this->faker->word,
-        'user_id' => $this->faker->word,
-        'message' => $this->faker->word,
-        'deleted_at' => $this->faker->date('Y-m-d H:i:s'),
+            'account_id' => $account = Account::all()->random(),
+        'user_id' => $account->user_id,
+        'message' => $this->faker->paragraph(2),
         'created_at' => $this->faker->date('Y-m-d H:i:s'),
         'updated_at' => $this->faker->date('Y-m-d H:i:s')
         ];

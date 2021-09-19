@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateQrcodeRequest;
 use App\Http\Requests\UpdateQrcodeRequest;
+use App\Http\Resources\QrcodeResource;
+use App\Http\Resources\QrcodeResourceCollection;
+use App\Models\User;
 use App\Repositories\QrcodeRepository;
 use App\Http\Controllers\AppBaseController;
 use Collective\Html\FormFacade;
@@ -32,12 +35,17 @@ class QrcodeController extends AppBaseController
      */
     public function index(Request $request)
     {
+        $isApiCall = $request->expectsJson();
         $user = $request->user();
         if ($user->isAdmin() || $user->isModerator()) {
-            $qrcodes = $this->qrcodeRepository->all();
+            $queryBuilder = $this->qrcodeRepository->makeModel()->latest();
+            $qrcodes = $isApiCall ? $queryBuilder->paginate(10) : $queryBuilder->get();
         }
         else {
-            $qrcodes = $user->qrcodes;
+            $qrcodes = $user->qrcodes()->paginate(10)->sortDesc();
+        }
+        if ($request->expectsJson()) {
+            return response()->success(QrcodeResource::collection($qrcodes)->response()->getData());
         }
         return view('qrcodes.index')
             ->with('qrcodes', $qrcodes);
@@ -69,13 +77,20 @@ class QrcodeController extends AppBaseController
 //        dd($input);
         if (Storage::exists($qrcodePath)) {
             $input['qrcode_path'] = $qrcodePath;
-            $input['user_id'] = auth()->id();
+            $input['user_id'] = getCurrentUser()->id;
             $input['status'] = $request->has('status');
-            $this->qrcodeRepository->create($input);
+            $qrcode = $this->qrcodeRepository->create($input);
             Flash::success('Qrcode saved successfully.');
         }
         else {
-            Flash::error('Qrcode saved fail.');
+            $error = 'Qrcode saved fail.';
+            Flash::error($error);
+        }
+        if($request->expectsJson()) {
+            if (isset($error)) {
+                return response()->error($error);
+            }
+            return response()->success(new QrcodeResource($qrcode));
         }
 
         return redirect(route('qrcodes.index'));

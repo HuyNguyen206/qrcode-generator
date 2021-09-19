@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes, UserPermissionTrait;
+    use HasFactory, Notifiable, SoftDeletes, UserPermissionTrait, HasApiTokens;
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';

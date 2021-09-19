@@ -37,5 +37,5 @@
 <!-- Status Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('status', 'Active:') !!}
-    {!! Form::checkbox('status', null, $qrcode->status) !!}
+    {!! Form::checkbox('status', null, old('status')) !!}
 </div>

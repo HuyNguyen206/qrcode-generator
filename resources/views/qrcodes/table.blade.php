@@ -11,6 +11,7 @@
             <th>Amount</th>
             <th>Status</th>
             <th>Action</th>
+            <th>Created at</th>
         </tr>
         </thead>
         <tbody>
@@ -39,6 +40,7 @@
                     </div>
                     {!! Form::close() !!}
                 </td>
+                <td>{{ $qrcode->created_at }}</td>
             </tr>
         @endforeach
         </tbody>

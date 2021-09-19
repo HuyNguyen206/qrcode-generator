@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Account;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AccountFactory extends Factory
@@ -22,18 +23,17 @@ class AccountFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => $this->faker->word,
-        'balance' => $this->faker->randomDigitNotNull,
-        'total_credit' => $this->faker->randomDigitNotNull,
-        'total_debit' => $this->faker->randomDigitNotNull,
-        'withdrawal_method' => $this->faker->word,
-        'payment_email' => $this->faker->word,
+        'balance' => $this->faker->numberBetween(200, 4000),
+        'total_credit' => $this->faker->numberBetween(50, 4000),
+        'total_debit' => $this->faker->numberBetween(0, 200),
+        'withdrawal_method' => $this->faker->randomElement(['bank', 'paypal', 'stripe', 'paystack']),
+        'payment_email' => $this->faker->email,
         'bank_name' => $this->faker->word,
-        'bank_branch' => $this->faker->word,
-        'bank_account' => $this->faker->word,
-        'applied_for_payout' => $this->faker->randomDigitNotNull,
-        'paid' => $this->faker->randomDigitNotNull,
-        'country' => $this->faker->word,
+        'bank_branch' => $this->faker->state,
+        'bank_account' => $this->faker->bankAccountNumber,
+        'applied_for_payout' => $this->faker->boolean(50),
+        'paid' => $this->faker->boolean(50),
+        'country' => $this->faker->country,
         'last_date_applied' => $this->faker->date('Y-m-d'),
         'last_date_paid' => $this->faker->date('Y-m-d'),
         'other_details' => $this->faker->text,

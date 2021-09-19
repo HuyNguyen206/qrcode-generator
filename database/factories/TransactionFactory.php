@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Qrcode;
 use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TransactionFactory extends Factory
@@ -22,13 +24,13 @@ class TransactionFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => $this->faker->word,
-        'qrcode_id' => $this->faker->word,
-        'payment_method' => $this->faker->word,
-        'qrcode_owner_id' => $this->faker->word,
+            'user_id' => User::all()->random(),
+        'qrcode_id' => Qrcode::all()->random(),
+        'payment_method' => "paystack/{$this->faker->creditCardType}",
+        'qrcode_owner_id' => User::all()->random(),
         'message' => $this->faker->text,
-        'amount' => $this->faker->randomDigitNotNull,
-        'status' => $this->faker->word,
+        'amount' => $this->faker->numberBetween(200, 4000),
+        'status' => $this->faker->randomElement(['completed', 'initiated', 'failed']),
         'created_at' => $this->faker->date('Y-m-d H:i:s'),
         'updated_at' => $this->faker->date('Y-m-d H:i:s')
         ];
