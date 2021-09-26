@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->group(function(){
-    Route::get('qrcodes', [QrcodeController::class, 'index']);
-    Route::post('qrcodes', [QrcodeController::class, 'store']);
+Route::middleware('client')->group(function(){
+    Route::resource('qrcodes', QrcodeController::class);
+//    Route::get('qrcodes', [QrcodeController::class, 'index']);
+//    Route::get('qrcodes/{qrcode}', [QrcodeController::class, 'show']);
+//    Route::post('qrcodes', [QrcodeController::class, 'store']);
 });

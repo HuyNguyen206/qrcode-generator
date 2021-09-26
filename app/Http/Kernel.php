@@ -5,6 +5,7 @@ namespace App\Http;
 use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckModerator;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Laravel\Passport\Http\Middleware\CheckClientCredentials;
 
 class Kernel extends HttpKernel
 {
@@ -66,6 +67,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'check-admin' => CheckAdmin::class,
-        'check-moderator' => CheckModerator::class
+        'check-moderator' => CheckModerator::class,
+        'client' => CheckClientCredentials::class,
     ];
 }

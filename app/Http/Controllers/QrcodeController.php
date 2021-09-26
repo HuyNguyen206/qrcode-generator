@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateQrcodeRequest;
 use App\Http\Requests\UpdateQrcodeRequest;
+use App\Http\Resources\QrcodeDetailResource;
 use App\Http\Resources\QrcodeResource;
 use App\Http\Resources\QrcodeResourceCollection;
 use App\Models\User;
@@ -12,6 +13,7 @@ use App\Http\Controllers\AppBaseController;
 use Collective\Html\FormFacade;
 use Illuminate\Http\Request;
 use Flash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Response;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -37,13 +39,18 @@ class QrcodeController extends AppBaseController
     {
         $isApiCall = $request->expectsJson();
         $user = $request->user();
-        if ($user->isAdmin() || $user->isModerator()) {
-            $queryBuilder = $this->qrcodeRepository->makeModel()->latest();
-            $qrcodes = $isApiCall ? $queryBuilder->paginate(10) : $queryBuilder->get();
+        if ($user) {
+            if ($user->isAdmin() || $user->isModerator()) {
+                $queryBuilder = $this->qrcodeRepository->makeModel()->latest();
+                $qrcodes = $isApiCall ? $queryBuilder->paginate(10) : $queryBuilder->get();
+            }
+            else {
+                $qrcodes = $user->qrcodes()->paginate(10)->sortDesc();
+            }
+        } else {
+            $qrcodes =$this->qrcodeRepository->makeModel()->latest()->paginate(10);
         }
-        else {
-            $qrcodes = $user->qrcodes()->paginate(10)->sortDesc();
-        }
+
         if ($request->expectsJson()) {
             return response()->success(QrcodeResource::collection($qrcodes)->response()->getData());
         }
@@ -73,18 +80,21 @@ class QrcodeController extends AppBaseController
         $input = $request->all();
         $qrcodePath = 'qrcodes/'.time().'.png';
         $qrcodeFullPath = public_path('storage/'.$qrcodePath);
-        QrCode::format('png')->generate('message qrcode', $qrcodeFullPath);
 //        dd($input);
-        if (Storage::exists($qrcodePath)) {
+//        if (Storage::exists($qrcodePath)) {
+        DB::beginTransaction();
             $input['qrcode_path'] = $qrcodePath;
             $input['user_id'] = getCurrentUser()->id;
             $input['status'] = $request->has('status');
             $qrcode = $this->qrcodeRepository->create($input);
             Flash::success('Qrcode saved successfully.');
-        }
-        else {
+            QrCode::format('png')->generate(route('qrcodes.show', $qrcode->id), $qrcodeFullPath);
+        if (!Storage::exists($qrcodePath)) {
             $error = 'Qrcode saved fail.';
             Flash::error($error);
+            DB::rollBack();
+        } else {
+            DB::commit();
         }
         if($request->expectsJson()) {
             if (isset($error)) {
@@ -106,11 +116,16 @@ class QrcodeController extends AppBaseController
     public function show($id)
     {
         $qrcode = $this->qrcodeRepository->find($id);
-
+        $isJsonRequest = \request()->expectsJson();
         if (empty($qrcode)) {
+            if ($isJsonRequest) {
+                return response()->error('Qrcode not found', 404, 404);
+            }
             Flash::error('Qrcode not found');
-
             return redirect(route('qrcodes.index'));
+        }
+        if ($isJsonRequest) {
+            return new QrcodeDetailResource($qrcode);
         }
         $transactions = $qrcode->transactions;
         return view('qrcodes.show', compact('qrcode', 'transactions'));

@@ -2,22 +2,20 @@
 
 namespace App\Http\Resources;
 
-use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
-class QrcodeResource extends JsonResource
+class QrcodeDetailResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
             'user_id' => $this->user_id,
             'website' => $this->website,
             'amount' => $this->amount,
@@ -27,7 +25,8 @@ class QrcodeResource extends JsonResource
             'link' => [
                 'payment_page_link' => route('qrcodes.show', $this->id),
                 'qrcode_link' => Storage::url($this->qrcode_path)
-            ]
+            ],
+            'transaction' => $this->transactions
         ];
     }
 }
